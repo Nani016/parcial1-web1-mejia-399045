@@ -1,158 +1,162 @@
-<!--
-Repository name suggested: parcial1-web1-apellido-codigo
-
-Instructions:
-1) Save this file as index.html
-2) Open locally (double click) to test SPA behavior.
-3) To push to GitHub: create a new repo named according to the requirement and push this file.
-4) To deploy on Vercel: connect the GitHub repo to Vercel and set root to `/`.
-
-This single-file project is a Vanilla JS SPA that demonstrates:
-- Flexbox & Grid usage
-- Semantic HTML
-- CSS styling
-- Navigation within a SPA (no page reloads)
-
--->
-
 <!doctype html>
 <html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Parcial1 - Perfil Social (SPA)</title>
+  <title>Facebook Clásico - Simulación SPA</title>
   <meta name="description" content="Simulación de perfil tipo Facebook como SPA - Vanilla JS, HTML semántico, Flexbox y Grid" />
   <style>
     :root{
-      --bg:#f2f5f9;
+      --fb-blue:#3b5998;
+      --bg:#e9ebee;
       --card:#fff;
-      --accent:#1877f2;
-      --muted:#6b7280;
-      --gap:16px;
-      --radius:12px;
-      --max-width:1000px;
-      font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      --muted:#606770;
+      --radius:8px;
+      --gap:12px;
+      --max-width:1100px;
+      --shadow: 0 4px 12px rgba(9,30,66,0.08);
+      font-family: 'Helvetica Neue', Arial, sans-serif;
     }
     *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:#0f1724;display:flex;justify-content:center;padding:24px}
-    .container{width:100%;max-width:var(--max-width)}
+    body{margin:0;background:var(--bg);color:#1d2129;display:flex;justify-content:center}
+    .app{width:100%;max-width:var(--max-width);}
 
-    /* HEADER */
-    header.site-header{background:var(--card);border-radius:12px;padding:12px 16px;margin-bottom:var(--gap);display:flex;align-items:center;gap:12px;box-shadow:0 4px 12px rgba(11,18,31,0.06)}
-    .branding{display:flex;align-items:center;gap:12px}
-    .logo{display:inline-flex;align-items:center;gap:8px}
-    .logo svg{width:36px;height:36px}
-    .app-name{font-weight:700}
+    /* HEADER (fijo visual) */
+    header.app-header{background:var(--fb-blue);color:white;padding:8px 12px;display:flex;align-items:center;gap:12px;position:sticky;top:0}
+    header .brand{display:flex;align-items:center;gap:10px}
+    header .brand .logo{font-weight:700;font-size:22px;letter-spacing:1px}
+    header .search{flex:1;display:flex;justify-content:center}
+    .search input{width:60%;max-width:560px;padding:8px 12px;border-radius:18px;border:none}
+    header .actions{display:flex;gap:10px;align-items:center}
+    header .icon{background:rgba(255,255,255,0.12);padding:8px;border-radius:50%;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center}
 
-    /* Search */
-    .search-area{margin-left:auto;display:flex;align-items:center;gap:8px}
-    .search-area input{padding:8px 12px;border-radius:999px;border:1px solid #e6edf5;min-width:220px}
-    .search-area button{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+    /* MAIN LAYOUT */
+    .layout{display:flex;gap:var(--gap);padding:18px}
+    aside.left{width:260px}
+    main.center{flex:1}
+    aside.right{width:300px}
 
-    /* LAYOUT: profile + nav */
-    .profile-grid{display:grid;grid-template-columns:260px 1fr;gap:var(--gap)}
+    /* LEFT SIDEBAR */
+    .profile-card{background:var(--card);padding:14px;border-radius:var(--radius);box-shadow:var(--shadow);position:sticky;top:84px}
+    .profile-card .avatar{display:flex;gap:12px;align-items:center}
+    .avatar img{width:72px;height:72px;border-radius:8px;object-fit:cover}
+    .profile-card h2{margin:0;font-size:16px}
+    .profile-card p{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .menu{margin-top:12px}
+    .menu button{display:flex;align-items:center;gap:10px;width:100%;padding:10px;border-radius:8px;border:none;background:transparent;cursor:pointer;color:#222}
+    .menu button.active{background:linear-gradient(90deg, rgba(59,89,152,0.08), rgba(59,89,152,0.03));border-left:3px solid var(--fb-blue);}
 
-    /* SIDEBAR: profile card */
-    aside.profile-card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 4px 8px rgba(11,18,31,0.04)}
-    .avatar{width:100%;display:flex;justify-content:center}
-    .avatar img{width:140px;height:140px;border-radius:50%;object-fit:cover}
-    .profile-name{margin-top:10px;text-align:center;font-weight:700}
-    .profile-bio{color:var(--muted);font-size:14px;text-align:center;margin-top:6px}
+    /* CENTER */
+    .card{background:var(--card);padding:12px;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:var(--gap)}
 
-    .nav-sections{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+    /* Publish box */
+    .publish{display:flex;gap:12px;align-items:flex-start}
+    .publish textarea{flex:1;border-radius:12px;padding:10px;border:1px solid #e6e9ee;resize:none;font-size:14px}
+    .publish .pub-actions{display:flex;flex-direction:column;gap:8px}
+    .btn{background:var(--fb-blue);color:white;padding:8px 12px;border-radius:6px;border:none;cursor:pointer}
 
-    .nav-sections button{background:#f8fafc;border:1px solid #eef2f7;padding:10px;border-radius:10px;cursor:pointer;text-align:left}
-    .nav-sections button.active{background:linear-gradient(90deg, rgba(24,119,242,0.12), rgba(24,119,242,0.06));border-color:rgba(24,119,242,0.18)}
+    /* Post */
+    article.post{display:flex;gap:12px;padding:12px;border-radius:10px}
+    article.post + article.post{margin-top:12px}
+    .post .meta{color:var(--muted);font-size:13px}
+    .post .body p{margin:8px 0}
+    .post .post-actions{display:flex;gap:14px;border-top:1px solid #eef2f7;padding-top:8px;margin-top:8px;color:var(--muted);font-size:14px}
+    .like.active{color:var(--fb-blue);font-weight:600}
 
-    /* MAIN CONTENT */
-    main.content{min-height:420px}
-    .card{background:var(--card);padding:16px;border-radius:12px;margin-bottom:var(--gap);box-shadow:0 6px 18px rgba(11,18,31,0.05)}
-
-    /* Muro: posts as flex column */
-    .post{display:flex;gap:12px}
-    .post .post-body{flex:1}
-    .post .post-header{display:flex;align-items:center;gap:10px}
-    .post .post-header img{width:48px;height:48px;border-radius:50%}
-    .post .post-content{margin-top:8px;color:#111827}
-    .post .post-meta{color:var(--muted);font-size:13px;margin-top:8px}
-
-    /* PHOTOS: grid */
+    /* PHOTOS grid */
     .photos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-    .photos-grid img{width:100%;height:140px;object-fit:cover;border-radius:8px}
+    .photos-grid img{width:100%;height:160px;object-fit:cover;border-radius:8px}
 
-    /* BOXES: examples using CSS grid areas */
-    .boxes-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:120px 120px;gap:12px}
-    .box{display:flex;align-items:center;justify-content:center;border-radius:12px;padding:12px;background:linear-gradient(180deg,#ffffff, #fbfdff);border:1px solid #eef6ff}
+    /* INFO list */
+    dl.info{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    dl dt{font-weight:700}
+    dl dd{margin:0;color:var(--muted)}
 
-    /* RESPONSIVE */
-    @media (max-width:800px){
-      .profile-grid{grid-template-columns:1fr;}
-      .photos-grid{grid-template-columns:repeat(2,1fr)}
-      .search-area input{min-width:120px}
+    /* RIGHT SIDEBAR */
+    .suggest{background:var(--card);padding:12px;border-radius:var(--radius);box-shadow:var(--shadow)}
+    .suggest h4{margin:0 0 8px}
+    .suggest .item{display:flex;gap:8px;align-items:center;padding:8px 0}
+
+    /* responsive */
+    @media (max-width:1024px){
+      aside.right{display:none}
+    }
+    @media (max-width:760px){
+      .layout{flex-direction:column;padding:12px}
+      aside.left{width:100%}
+      .search input{width:100%}
     }
 
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="app" role="application">
 
-    <header class="site-header" role="banner">
-      <div class="branding">
-        <a href="#" class="logo" aria-label="Inicio">
-          <!-- simple SVG logo -->
-          <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="48" height="48" rx="10" fill="#1877f2"/><path d="M14 30v-7h6v7h5v-11h4l1-5h-5V12c0-1.1.9-2 2-2h3V5h-4c-4.4 0-8 3-8 7v4h-4v5h-1z" fill="#fff"/></svg>
-          <span class="app-name">MyFaceSim</span>
-        </a>
+    <header class="app-header" role="banner">
+      <div class="brand" aria-hidden="true">
+        <div class="logo">facebook</div>
       </div>
-
-      <div class="search-area" role="search">
-        <label for="search-input" class="sr-only" style="display:none">Buscar</label>
-        <input id="search-input" type="search" placeholder="Buscar en MyFaceSim..." aria-label="Buscar" />
-        <button id="search-btn" aria-label="Buscar botón">Buscar</button>
+      <div class="search" role="search">
+        <input id="search" type="search" placeholder="Buscar en Facebook" aria-label="Buscar" />
+      </div>
+      <div class="actions" aria-hidden="true">
+        <div class="icon">🔔</div>
+        <div class="icon">✉️</div>
+        <div class="icon">👤</div>
       </div>
     </header>
 
-    <div class="profile-grid">
+    <div class="layout" role="main">
 
-      <aside class="profile-card" aria-labelledby="profile-name">
-        <div class="avatar">
-          <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop&crop=faces" alt="Avatar de usuario" />
+      <aside class="left" aria-label="Barra lateral izquierda">
+        <div class="profile-card" role="region" aria-labelledby="profile-name">
+          <div class="avatar">
+            <img src="https://okdiario.com/img/2019/08/10/origen-del-futbol.jpg" alt="avatar">
+            <div>
+              <h2 id="profile-name">Daniel Mejía</h2>
+              <p>Desarrollador web</p>
+            </div>
+          </div>
+
+          <nav class="menu" aria-label="Navegación del perfil">
+            <button data-section="muro" class="active">🏠 Muro</button>
+            <button data-section="info">ℹ️ Info</button>
+            <button data-section="photos">🖼️ Photos</button>
+            <button data-section="boxes">📦 Boxes</button>
+          </nav>
         </div>
-        <h2 id="profile-name" class="profile-name">Daniel Mejía</h2>
-        <p class="profile-bio">Desarrollador web | Aprendiendo SPA y buenas prácticas</p>
-
-        <nav class="nav-sections" aria-label="Secciones del perfil">
-          <button data-section="muro" class="active">Muro</button>
-          <button data-section="info">Info</button>
-          <button data-section="photos">Photos</button>
-          <button data-section="boxes">Boxes</button>
-        </nav>
       </aside>
 
-      <main class="content" role="main">
-        <!-- Sections rendered by SPA JS -->
+      <main class="center">
         <section id="view" aria-live="polite"></section>
       </main>
 
+      <aside class="right" aria-label="Sugerencias">
+        <div class="suggest">
+          <h4>Sugerencias</h4>
+          <div class="item"><img src="https://picsum.photos/seed/1/40/40" style="width:40px;height:40px;border-radius:6px;object-fit:cover" alt=""/><div><strong>Proyecto X</strong><div style="color:var(--muted);font-size:13px">Te puede interesar</div></div></div>
+          <div class="item"><img src="https://picsum.photos/seed/2/40/40" style="width:40px;height:40px;border-radius:6px;object-fit:cover" alt=""/><div><strong>Curso Y</strong><div style="color:var(--muted);font-size:13px">Ver más</div></div></div>
+        </div>
+      </aside>
+
     </div>
 
-    <footer style="margin-top:16px;text-align:center;color:var(--muted);font-size:13px">Proyecto: parcial1-web1-apellido-código — Demo SPA (Vanilla JS)</footer>
-
+    <footer style="text-align:center;padding:18px;color:var(--muted)">Parcial1 </footer>
   </div>
 
   <script>
-    // --- Simulated data ---
+    // DATA
     const state = {
       posts: [
-        {id:1, author:'Laura R.', time:'2 hrs', text:'¡Un día genial construyendo interfaces!'},
-        {id:2, author:'Carlos G.', time:'1 day', text:'Compartiendo recursos para aprender Flexbox.'}
+        {id:1, author:'Laura R.', time:'2 hrs', text:'¡Un día genial construyendo interfaces!', likes:2, liked:false},
+        {id:2, author:'Carlos G.', time:'1 day', text:'Compartiendo recursos para aprender Flexbox. Muy útiles.', likes:5, liked:false}
       ],
       info: {
-        "Trabajo":"Estudiante - Desarrollo Web",
-        "Ubicación":"Bogotá, Colombia",
-        "Educación":"Universidad - Ingeniería"
+        'Trabajo':'Desarrollador Frontend',
+        'Ubicación':'Cali, Colombia',
+        'Educación':'Universidad'
       },
-      photos: Array.from({length:9}).map((_,i)=>"https://picsum.photos/seed/"+(i+1)+"/600/400"),
+      photos: Array.from({length:9}).map((_,i)=>`https://picsum.photos/seed/fb${i+1}/600/400`),
       boxes: [
         {title:'Amigos', value:256},
         {title:'Publicaciones', value:43},
@@ -161,55 +165,88 @@ This single-file project is a Vanilla JS SPA that demonstrates:
       ]
     }
 
-    // DOM refs
+    // DOM
     const view = document.getElementById('view')
-    const navButtons = document.querySelectorAll('.nav-sections button')
+    const menuBtns = document.querySelectorAll('.menu button')
 
-    // render functions (each view returns an element or HTML string)
+    // Renders
     function renderMuro(){
-      // create container
       const container = document.createElement('div')
-      container.className = 'card'
 
-      const header = document.createElement('h3')
-      header.textContent = 'Muro'
-      container.appendChild(header)
+      // publish card
+      const publish = document.createElement('div')
+      publish.className='card'
+      publish.innerHTML = `
+        <div style="display:flex;gap:12px">
+          <img src="https://picsum.photos/seed/u0/64/64" style="width:64px;height:64px;border-radius:8px;object-fit:cover" alt="" />
+          <div style="flex:1">
+            <textarea id="pubText" rows="3" placeholder="¿Qué estás pensando?" style="width:100%;border-radius:10px;padding:8px;border:1px solid #e6e9ee"></textarea>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+              <div style="display:flex;gap:8px">
+                <button id="btnPhoto" style="background:transparent;border:none;cursor:pointer">📷 Foto</button>
+                <button id="btnVideo" style="background:transparent;border:none;cursor:pointer">🎥 Video</button>
+              </div>
+              <button id="postBtn" class="btn">Publicar</button>
+            </div>
+          </div>
+        </div>
+      `
 
-      // posts list
-      state.posts.forEach(post=>{
-        const article = document.createElement('article')
-        article.className = 'post'
+      container.appendChild(publish)
 
-        article.innerHTML = `
-          <img src="https://picsum.photos/seed/u${post.id}/80/80" alt="avatar" />
-          <div class="post-body">
-            <div class="post-header"><strong>${post.author}</strong><span style="margin-left:8px;color:var(--muted);font-size:13px">· ${post.time}</span></div>
-            <div class="post-content">${post.text}</div>
-            <div class="post-meta">Me gusta · Comentar · Compartir</div>
+      // posts
+      state.posts.forEach(p=>{
+        const art = document.createElement('article')
+        art.className='card post'
+        art.innerHTML = `
+          <img src="https://picsum.photos/seed/u${p.id}/64/64" style="width:64px;height:64px;border-radius:8px;object-fit:cover" alt="" />
+          <div class="body" style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px"><strong>${p.author}</strong><div class="meta">· ${p.time}</div></div>
+            <p>${p.text}</p>
+            <div class="post-actions">
+              <span class="like ${p.liked? 'active':''}" data-id="${p.id}">👍 ${p.likes}</span>
+              <span>💬 Comentar</span>
+              <span>↗️ Compartir</span>
+            </div>
           </div>
         `
-        container.appendChild(article)
+        container.appendChild(art)
       })
+
+      // attach post handlers after inserted to DOM
+      setTimeout(()=>{
+        document.getElementById('postBtn').addEventListener('click', ()=>{
+          const text = document.getElementById('pubText').value.trim()
+          if(!text) return alert('Escribe algo antes de publicar')
+          const newPost = {id: Date.now(), author:'Tú', time:'Ahora', text, likes:0, liked:false}
+          state.posts.unshift(newPost)
+          navigateTo('muro')
+        })
+
+        document.querySelectorAll('.like').forEach(el=>{
+          el.addEventListener('click', ()=>{
+            const id = parseInt(el.dataset.id)
+            const post = state.posts.find(p=>p.id===id)
+            if(!post) return
+            post.liked = !post.liked
+            post.likes += post.liked?1:-1
+            navigateTo('muro')
+          })
+        })
+      },0)
 
       return container
     }
 
     function renderInfo(){
       const container = document.createElement('div')
-      container.className = 'card'
-      const header = document.createElement('h3')
-      header.textContent = 'Info'
-      container.appendChild(header)
-
+      container.className='card'
+      container.innerHTML = '<h3>Información</h3>'
       const dl = document.createElement('dl')
+      dl.className='info'
       for(const [k,v] of Object.entries(state.info)){
-        const dt = document.createElement('dt')
-        dt.textContent = k
-        dt.style.fontWeight='700'
-        const dd = document.createElement('dd')
-        dd.textContent = v
-        dd.style.marginBottom='8px'
-        dd.style.color='var(--muted)'
+        const dt = document.createElement('dt'); dt.textContent = k
+        const dd = document.createElement('dd'); dd.textContent=v
         dl.appendChild(dt); dl.appendChild(dd)
       }
       container.appendChild(dl)
@@ -218,17 +255,14 @@ This single-file project is a Vanilla JS SPA that demonstrates:
 
     function renderPhotos(){
       const container = document.createElement('div')
-      container.className = 'card'
-      const header = document.createElement('h3')
-      header.textContent = 'Photos'
-      container.appendChild(header)
-
+      container.className='card'
+      container.innerHTML = '<h3>Photos</h3>'
       const grid = document.createElement('div')
-      grid.className = 'photos-grid'
+      grid.className='photos-grid'
       state.photos.forEach(src=>{
         const img = document.createElement('img')
         img.src = src
-        img.loading = 'lazy'
+        img.loading='lazy'
         grid.appendChild(img)
       })
       container.appendChild(grid)
@@ -237,85 +271,46 @@ This single-file project is a Vanilla JS SPA that demonstrates:
 
     function renderBoxes(){
       const container = document.createElement('div')
-      container.className = 'card'
-      const header = document.createElement('h3')
-      header.textContent = 'Boxes (Stats)'
-      container.appendChild(header)
-
+      container.className='card'
+      container.innerHTML = '<h3>Boxes (Estadísticas)</h3>'
       const grid = document.createElement('div')
-      grid.className = 'boxes-grid'
-
+      grid.style.display='grid'
+      grid.style.gridTemplateColumns='repeat(2,1fr)'
+      grid.style.gap='8px'
       state.boxes.forEach(b=>{
-        const el = document.createElement('div')
-        el.className = 'box'
-        el.innerHTML = `<div style="text-align:center"><strong style="font-size:18px">${b.value}</strong><div style="color:var(--muted);margin-top:6px">${b.title}</div></div>`
-        grid.appendChild(el)
+        const box = document.createElement('div')
+        box.style.padding='12px'
+        box.style.borderRadius='8px'
+        box.style.background='#fbfbff'
+        box.style.border='1px solid #eef2ff'
+        box.innerHTML=`<div style="font-size:18px;font-weight:700">${b.value}</div><div style="color:var(--muted)">${b.title}</div>`
+        grid.appendChild(box)
       })
-
       container.appendChild(grid)
       return container
     }
 
-    // Router-like switch
+    // Router
     function navigateTo(section){
-      // update active nav
-      navButtons.forEach(btn=>btn.classList.toggle('active', btn.dataset.section===section))
+      // active styles
+      menuBtns.forEach(b=>b.classList.toggle('active', b.dataset.section===section))
 
-      // clear view
       view.innerHTML = ''
-
       let node
       switch(section){
         case 'muro': node = renderMuro(); break
         case 'info': node = renderInfo(); break
         case 'photos': node = renderPhotos(); break
         case 'boxes': node = renderBoxes(); break
-        default: node = renderMuro();
+        default: node = renderMuro()
       }
-
       view.appendChild(node)
     }
 
     // attach listeners
-    navButtons.forEach(btn=>{
-      btn.addEventListener('click', e=>{
-        const section = e.currentTarget.dataset.section
-        navigateTo(section)
-      })
-    })
+    menuBtns.forEach(btn=>btn.addEventListener('click', ()=>navigateTo(btn.dataset.section)))
 
-    // search example: filter posts (simple simulated behaviour)
-    document.getElementById('search-btn').addEventListener('click', ()=>{
-      const q = document.getElementById('search-input').value.trim().toLowerCase()
-      if(!q){
-        navigateTo('muro')
-        return
-      }
-      // simulate results: show posts containing query
-      const matches = state.posts.filter(p=>p.text.toLowerCase().includes(q) || p.author.toLowerCase().includes(q))
-      view.innerHTML = ''
-      const resultCard = document.createElement('div')
-      resultCard.className='card'
-      const h = document.createElement('h3')
-      h.textContent = `Resultados para "${q}" (${matches.length})`
-      resultCard.appendChild(h)
-
-      if(matches.length===0){
-        const p = document.createElement('p')
-        p.textContent='No se encontraron resultados.'
-        resultCard.appendChild(p)
-      }else{
-        matches.forEach(m=>{
-          const div = document.createElement('div')
-          div.style.marginTop='8px'
-          div.innerHTML = `<strong>${m.author}</strong> · ${m.time}<div style="color:var(--muted);margin-top:6px">${m.text}</div>`
-          resultCard.appendChild(div)
-        })
-      }
-      view.appendChild(resultCard)
-    })
-
-    // initialize default view
+    // init
     navigateTo('muro')
 
   </script>
