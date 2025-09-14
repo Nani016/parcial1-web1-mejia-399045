@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Facebook Clásico - Simulación SPA</title>
+  <meta name="description" content="Simulación de perfil tipo Facebook como SPA - Vanilla JS, HTML semántico, Flexbox y Grid" />
+  <style>
+    :root{
+      --fb-blue:#3b5998;
+      --bg:#e9ebee;
+      --card:#fff;
+      --muted:#606770;
+      --radius:8px;
+      --gap:12px;
+      --max-width:1100px;
+      --shadow: 0 4px 12px rgba(9,30,66,0.08);
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:#1d2129;display:flex;justify-content:center}
+    .app{width:100%;max-width:var(--max-width);}
+
+    /* HEADER (fijo visual) */
+    header.app-header{background:var(--fb-blue);color:white;padding:8px 12px;display:flex;align-items:center;gap:12px;position:sticky;top:0}
+    header .brand{display:flex;align-items:center;gap:10px}
+    header .brand .logo{font-weight:700;font-size:22px;letter-spacing:1px}
+    header .search{flex:1;display:flex;justify-content:center}
+    .search input{width:60%;max-width:560px;padding:8px 12px;border-radius:18px;border:none}
+    header .actions{display:flex;gap:10px;align-items:center}
+    header .icon{background:rgba(255,255,255,0.12);padding:8px;border-radius:50%;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center}
+
+    /* MAIN LAYOUT */
+    .layout{display:flex;gap:var(--gap);padding:18px}
+    aside.left{width:260px}
+    main.center{flex:1}
+    aside.right{width:300px}
+
+    /* LEFT SIDEBAR */
+    .profile-card{background:var(--card);padding:14px;border-radius:var(--radius);box-shadow:var(--shadow);position:sticky;top:84px}
+    .profile-card .avatar{display:flex;gap:12px;align-items:center}
+    .avatar img{width:72px;height:72px;border-radius:8px;object-fit:cover}
+    .profile-card h2{margin:0;font-size:16px}
+    .profile-card p{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .menu{margin-top:12px}
+    .menu button{display:flex;align-items:center;gap:10px;width:100%;padding:10px;border-radius:8px;border:none;background:transparent;cursor:pointer;color:#222}
+    .menu button.active{background:linear-gradient(90deg, rgba(59,89,152,0.08), rgba(59,89,152,0.03));border-left:3px solid var(--fb-blue);}
+
+    /* CENTER */
+    .card{background:var(--card);padding:12px;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:var(--gap)}
+
+    /* Publish box */
+    .publish{display:flex;gap:12px;align-items:flex-start}
+    .publish textarea{flex:1;border-radius:12px;padding:10px;border:1px solid #e6e9ee;resize:none;font-size:14px}
+    .publish .pub-actions{display:flex;flex-direction:column;gap:8px}
+    .btn{background:var(--fb-blue);color:white;padding:8px 12px;border-radius:6px;border:none;cursor:pointer}
+
+    /* Post */
+    article.post{display:flex;gap:12px;padding:12px;border-radius:10px}
+    article.post + article.post{margin-top:12px}
+    .post .meta{color:var(--muted);font-size:13px}
+    .post .body p{margin:8px 0}
+    .post .post-actions{display:flex;gap:14px;border-top:1px solid #eef2f7;padding-top:8px;margin-top:8px;color:var(--muted);font-size:14px}
+    .like.active{color:var(--fb-blue);font-weight:600}
+
+    /* PHOTOS grid */
+    .photos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .photos-grid img{width:100%;height:160px;object-fit:cover;border-radius:8px}
+
+    /* INFO list */
+    dl.info{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    dl dt{font-weight:700}
+    dl dd{margin:0;color:var(--muted)}
+
+    /* RIGHT SIDEBAR */
+    .suggest{background:var(--card);padding:12px;border-radius:var(--radius);box-shadow:var(--shadow)}
+    .suggest h4{margin:0 0 8px}
+    .suggest .item{display:flex;gap:8px;align-items:center;padding:8px 0}
+
+    /* responsive */
+    @media (max-width:1024px){
+      aside.right{display:none}
+    }
+    @media (max-width:760px){
+      .layout{flex-direction:column;padding:12px}
+      aside.left{width:100%}
+      .search input{width:100%}
+    }
+
+  </style>
+</head>
+<body>
+  <div class="app" role="application">
+
+    <header class="app-header" role="banner">
+      <div class="brand" aria-hidden="true">
+        <div class="logo">facebook</div>
+      </div>
+      <div class="search" role="search">
+        <input id="search" type="search" placeholder="Buscar en Facebook" aria-label="Buscar" />
+      </div>
+      <div class="actions" aria-hidden="true">
+        <div class="icon">🔔</div>
+        <div class="icon">✉️</div>
+        <div class="icon">👤</div>
+      </div>
+    </header>
+
+    <div class="layout" role="main">
+
+      <aside class="left" aria-label="Barra lateral izquierda">
+        <div class="profile-card" role="region" aria-labelledby="profile-name">
+          <div class="avatar">
+            <img src="https://okdiario.com/img/2019/08/10/origen-del-futbol.jpg" alt="avatar">
+            <div>
+              <h2 id="profile-name">Daniel Mejía</h2>
+              <p>Desarrollador web</p>
+            </div>
+          </div>
+
+          <nav class="menu" aria-label="Navegación del perfil">
+            <button data-section="muro" class="active">🏠 Muro</button>
+            <button data-section="info">ℹ️ Info</button>
+            <button data-section="photos">🖼️ Photos</button>
+            <button data-section="boxes">📦 Boxes</button>
+          </nav>
+        </div>
+      </aside>
+
+      <main class="center">
+        <section id="view" aria-live="polite"></section>
+      </main>
+
+      <aside class="right" aria-label="Sugerencias">
+        <div class="suggest">
+          <h4>Sugerencias</h4>
+          <div class="item"><img src="https://picsum.photos/seed/1/40/40" style="width:40px;height:40px;border-radius:6px;object-fit:cover" alt=""/><div><strong>Proyecto X</strong><div style="color:var(--muted);font-size:13px">Te puede interesar</div></div></div>
+          <div class="item"><img src="https://picsum.photos/seed/2/40/40" style="width:40px;height:40px;border-radius:6px;object-fit:cover" alt=""/><div><strong>Curso Y</strong><div style="color:var(--muted);font-size:13px">Ver más</div></div></div>
+        </div>
+      </aside>
+
+    </div>
+
+    <footer style="text-align:center;padding:18px;color:var(--muted)">Parcial1 </footer>
+  </div>
+
+  <script>
+    // DATA
+    const state = {
+      posts: [
+        {id:1, author:'Laura R.', time:'2 hrs', text:'¡Un día genial construyendo interfaces!', likes:2, liked:false},
+        {id:2, author:'Carlos G.', time:'1 day', text:'Compartiendo recursos para aprender Flexbox. Muy útiles.', likes:5, liked:false}
+      ],
+      info: {
+        'Trabajo':'Desarrollador Frontend',
+        'Ubicación':'Cali, Colombia',
+        'Educación':'Universidad'
+      },
+      photos: Array.from({length:9}).map((_,i)=>`https://picsum.photos/seed/fb${i+1}/600/400`),
+      boxes: [
+        {title:'Amigos', value:256},
+        {title:'Publicaciones', value:43},
+        {title:'Reacciones', value:1024},
+        {title:'Grupos', value:12}
+      ]
+    }
+
+    // DOM
+    const view = document.getElementById('view')
+    const menuBtns = document.querySelectorAll('.menu button')
+
+    // Renders
+    function renderMuro(){
+      const container = document.createElement('div')
+
+      // publish card
+      const publish = document.createElement('div')
+      publish.className='card'
+      publish.innerHTML = `
+        <div style="display:flex;gap:12px">
+          <img src="https://picsum.photos/seed/u0/64/64" style="width:64px;height:64px;border-radius:8px;object-fit:cover" alt="" />
+          <div style="flex:1">
+            <textarea id="pubText" rows="3" placeholder="¿Qué estás pensando?" style="width:100%;border-radius:10px;padding:8px;border:1px solid #e6e9ee"></textarea>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+              <div style="display:flex;gap:8px">
+                <button id="btnPhoto" style="background:transparent;border:none;cursor:pointer">📷 Foto</button>
+                <button id="btnVideo" style="background:transparent;border:none;cursor:pointer">🎥 Video</button>
+              </div>
+              <button id="postBtn" class="btn">Publicar</button>
+            </div>
+          </div>
+        </div>
+      `
+
+      container.appendChild(publish)
+
+      // posts
+      state.posts.forEach(p=>{
+        const art = document.createElement('article')
+        art.className='card post'
+        art.innerHTML = `
+          <img src="https://picsum.photos/seed/u${p.id}/64/64" style="width:64px;height:64px;border-radius:8px;object-fit:cover" alt="" />
+          <div class="body" style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px"><strong>${p.author}</strong><div class="meta">· ${p.time}</div></div>
+            <p>${p.text}</p>
+            <div class="post-actions">
+              <span class="like ${p.liked? 'active':''}" data-id="${p.id}">👍 ${p.likes}</span>
+              <span>💬 Comentar</span>
+              <span>↗️ Compartir</span>
+            </div>
+          </div>
+        `
+        container.appendChild(art)
+      })
+
+      // attach post handlers after inserted to DOM
+      setTimeout(()=>{
+        document.getElementById('postBtn').addEventListener('click', ()=>{
+          const text = document.getElementById('pubText').value.trim()
+          if(!text) return alert('Escribe algo antes de publicar')
+          const newPost = {id: Date.now(), author:'Tú', time:'Ahora', text, likes:0, liked:false}
+          state.posts.unshift(newPost)
+          navigateTo('muro')
+        })
+
+        document.querySelectorAll('.like').forEach(el=>{
+          el.addEventListener('click', ()=>{
+            const id = parseInt(el.dataset.id)
+            const post = state.posts.find(p=>p.id===id)
+            if(!post) return
+            post.liked = !post.liked
+            post.likes += post.liked?1:-1
+            navigateTo('muro')
+          })
+        })
+      },0)
+
+      return container
+    }
+
+    function renderInfo(){
+      const container = document.createElement('div')
+      container.className='card'
+      container.innerHTML = '<h3>Información</h3>'
+      const dl = document.createElement('dl')
+      dl.className='info'
+      for(const [k,v] of Object.entries(state.info)){
+        const dt = document.createElement('dt'); dt.textContent = k
+        const dd = document.createElement('dd'); dd.textContent=v
+        dl.appendChild(dt); dl.appendChild(dd)
+      }
+      container.appendChild(dl)
+      return container
+    }
+
+    function renderPhotos(){
+      const container = document.createElement('div')
+      container.className='card'
+      container.innerHTML = '<h3>Photos</h3>'
+      const grid = document.createElement('div')
+      grid.className='photos-grid'
+      state.photos.forEach(src=>{
+        const img = document.createElement('img')
+        img.src = src
+        img.loading='lazy'
+        grid.appendChild(img)
+      })
+      container.appendChild(grid)
+      return container
+    }
+
+    function renderBoxes(){
+      const container = document.createElement('div')
+      container.className='card'
+      container.innerHTML = '<h3>Boxes (Estadísticas)</h3>'
+      const grid = document.createElement('div')
+      grid.style.display='grid'
+      grid.style.gridTemplateColumns='repeat(2,1fr)'
+      grid.style.gap='8px'
+      state.boxes.forEach(b=>{
+        const box = document.createElement('div')
+        box.style.padding='12px'
+        box.style.borderRadius='8px'
+        box.style.background='#fbfbff'
+        box.style.border='1px solid #eef2ff'
+        box.innerHTML=`<div style="font-size:18px;font-weight:700">${b.value}</div><div style="color:var(--muted)">${b.title}</div>`
+        grid.appendChild(box)
+      })
+      container.appendChild(grid)
+      return container
+    }
+
+    // Router
+    function navigateTo(section){
+      // active styles
+      menuBtns.forEach(b=>b.classList.toggle('active', b.dataset.section===section))
+
+      view.innerHTML = ''
+      let node
+      switch(section){
+        case 'muro': node = renderMuro(); break
+        case 'info': node = renderInfo(); break
+        case 'photos': node = renderPhotos(); break
+        case 'boxes': node = renderBoxes(); break
+        default: node = renderMuro()
+      }
+      view.appendChild(node)
+    }
+
+    // attach listeners
+    menuBtns.forEach(btn=>btn.addEventListener('click', ()=>navigateTo(btn.dataset.section)))
+
+    // init
+    navigateTo('muro')
+
+  </script>
+</body>
+</html>
