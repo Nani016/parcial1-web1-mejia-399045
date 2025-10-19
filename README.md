@@ -1,13 +1,5 @@
-# facebook-vue
+# facebook-vue 3
 
-Proyecto Vite + Vue 3 generado desde ChatGPT.
+Danilo Mejia Obregon
+399045
 
-Instrucciones:
-
-1. Instalar dependencias:
-   npm install
-
-2. Levantar servidor de desarrollo:
-   npm run dev
-
-Este paquete incluye un ejemplo del parcial 1 convertido a Vue 3 con routing y componentes.
