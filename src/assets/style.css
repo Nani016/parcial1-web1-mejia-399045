@@ -1,0 +1,134 @@
+:root{
+  --fb-blue:#3b5998;
+  --bg:#e9ebee;
+  --card:#fff;
+  --muted:#606770;
+  --radius:8px;
+  --gap:12px;
+  --max-width:1100px;
+  --shadow: 0 4px 12px rgba(9,30,66,0.08);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+/* Prefer light scheme and try to opt-out of browser forced darkening */
+html{color-scheme: light;}
+body{forced-color-adjust: none}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#1d2129;display:flex;justify-content:center}
+.app{width:100%;max-width:var(--max-width);}
+
+/* Diagnostic banner to confirm page & JS loaded (cerrable) */
+.diag-banner{background:#ffec99;color:#000;padding:10px 12px;border-radius:10px;margin:12px 0;font-weight:700;display:flex;justify-content:center;align-items:center;gap:12px}
+.diag-banner button{background:transparent;border:none;cursor:pointer;padding:6px;font-weight:700}
+
+/* Persistent high-contrast banner and help modal */
+.diag-perm{position:fixed;left:12px;bottom:12px;background:#ff4d4f;color:#fff;padding:10px 14px;border-radius:10px;z-index:9999;box-shadow:0 6px 18px rgba(0,0,0,0.25);display:flex;gap:10px;align-items:center}
+.diag-perm button{background:rgba(255,255,255,0.15);border:none;color:#fff;padding:6px 8px;border-radius:6px;cursor:pointer}
+.diag-help{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;color:#111;padding:18px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.35);z-index:10000;max-width:720px;display:none}
+.diag-help h3{margin-top:0}
+.diag-help pre{background:#f6f8fa;padding:8px;border-radius:6px;overflow:auto}
+
+/* HEADER (fijo visual) */
+header.app-header{background:var(--fb-blue);color:white;padding:8px 12px;display:flex;align-items:center;gap:12px;position:sticky;top:0}
+header .brand{display:flex;align-items:center;gap:10px}
+header .brand .logo{font-weight:700;font-size:22px;letter-spacing:1px}
+header .search{flex:1;display:flex;justify-content:center}
+/* menu toggle (visible en móviles) */
+.menu-toggle{display:none;background:transparent;border:none;color:white;font-size:20px;padding:6px 8px;border-radius:6px;cursor:pointer}
+.search input{width:60%;max-width:560px;padding:8px 12px;border-radius:18px;border:none}
+header .actions{display:flex;gap:10px;align-items:center}
+header .icon{background:rgba(255,255,255,0.12);padding:8px;border-radius:50%;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center}
+
+/* MAIN LAYOUT */
+.layout{display:flex;gap:var(--gap);padding:18px}
+aside.left{width:260px}
+main.center{flex:1}
+aside.right{width:300px}
+
+/* LEFT SIDEBAR */
+.profile-card{background:var(--card);padding:14px;border-radius:var(--radius);box-shadow:var(--shadow);position:sticky;top:84px}
+.profile-card .avatar{display:flex;gap:12px;align-items:center}
+.avatar img{width:72px;height:72px;border-radius:8px;object-fit:cover}
+.profile-card h2{margin:0;font-size:16px}
+.profile-card p{margin:6px 0 0;color:var(--muted);font-size:13px}
+.menu{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.menu-link{display:block;padding:10px;border-radius:8px;text-decoration:none;color:#222;background:transparent}
+.menu-link:hover{background:linear-gradient(90deg, rgba(59,89,152,0.04), rgba(59,89,152,0.02))}
+.menu-link.router-link-active, .menu-link.active{background:linear-gradient(90deg, rgba(59,89,152,0.08), rgba(59,89,152,0.03));border-left:3px solid var(--fb-blue);padding-left:12px}
+
+/* Drawer default: hidden on desktop to avoid duplicate menu */
+.drawer, .drawer-overlay { display: none; }
+
+/* CENTER */
+.card{background:var(--card);padding:12px;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:var(--gap)}
+
+/* Publish box */
+.publish{display:flex;gap:12px;align-items:flex-start;flex-direction:row}
+.publish textarea{flex:1;border-radius:12px;padding:10px;border:1px solid #e6e9ee;resize:none;font-size:14px;min-height:64px}
+.publish .pub-actions{display:flex;flex-direction:column;gap:8px}
+.btn{background:var(--fb-blue);color:white;padding:8px 12px;border-radius:6px;border:none;cursor:pointer}
+
+/* Post */
+article.post{display:flex;gap:12px;padding:12px;border-radius:10px}
+article.post + article.post{margin-top:12px}
+.post .meta{color:var(--muted);font-size:13px}
+.post .body p{margin:8px 0}
+.post .post-actions{display:flex;gap:14px;border-top:1px solid #eef2f7;padding-top:8px;margin-top:8px;color:var(--muted);font-size:14px}
+.like.active{color:var(--fb-blue);font-weight:600}
+
+/* PHOTOS grid */
+.photos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.photos-grid img{width:100%;height:160px;object-fit:cover;border-radius:8px}
+
+/* INFO list */
+dl.info{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+dl dt{font-weight:700}
+dl dd{margin:0;color:var(--muted)}
+
+/* RIGHT SIDEBAR */
+.suggest{background:var(--card);padding:12px;border-radius:var(--radius);box-shadow:var(--shadow)}
+.suggest h4{margin:0 0 8px}
+.suggest .item{display:flex;gap:8px;align-items:center;padding:8px 0}
+
+/* responsive */
+/* Responsive adjustments */
+@media (max-width:1200px){
+  .app{padding:0 12px}
+}
+@media (max-width:1024px){
+  aside.right{display:none}
+  aside.left{width:220px}
+  .layout{gap:10px}
+}
+@media (max-width:760px){
+  .layout{flex-direction:column;padding:12px}
+  aside.left{width:100%}
+  .search input{width:100%}
+  /* Make publish area stack vertically on small screens */
+  .publish{flex-direction:column}
+  .publish .pub-actions{flex-direction:row;justify-content:flex-end}
+  /* Make posts adapt: stack image above content on narrow screens */
+  article.post{flex-direction:row;align-items:flex-start}
+  article.post img{width:56px;height:56px}
+  /* Photos grid reduces columns */
+  .photos-grid{grid-template-columns:repeat(2,1fr)}
+  /* Info list become single column */
+  dl.info{grid-template-columns:1fr}
+  /* Menu: keep vertical but increase tappable area */
+  .menu-link{padding:12px}
+  /* Show menu toggle and hide fixed sidebar on small screens */
+  .menu-toggle{display:inline-flex}
+  aside.left{display:none}
+  /* Drawer styles */
+  .drawer-overlay{display:block;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:999;transition:opacity .25s ease;opacity:1}
+  .drawer{display:block;position:fixed;left:0;top:0;height:100%;width:280px;background:var(--card);box-shadow:0 10px 30px rgba(0,0,0,0.2);transform:translateX(-110%);transition:transform .28s cubic-bezier(.2,.9,.2,1);z-index:1000;overflow:auto}
+  .drawer.open{transform:translateX(0)}
+  .drawer-header{display:flex;justify-content:flex-end;padding:10px}
+  .close-btn{background:transparent;border:none;font-size:20px;cursor:pointer;padding:6px}
+}
+
+@media (max-width:420px){
+  /* Very small screens: single column posts, compact header */
+  header .brand .logo{font-size:18px}
+  article.post{flex-direction:row;gap:8px}
+  .photos-grid{grid-template-columns:1fr}
+}
